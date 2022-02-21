@@ -1,4 +1,4 @@
-My solutions for Deep Learning course of NSU Physics Department
+My solutions for Deep Learning Course at NSU Physics Department
 
 Assignments and lectures: [dlcourse.ai](http://dlcourse.ai).
 
