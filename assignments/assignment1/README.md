@@ -1,17 +1,11 @@
-# Задание 1
+# Assignment 1
 
-В этом задании мы реализуем некоторые методы машинного обучения, которые помогут нам с реализацией нейросетей в следующих заданиях.
+K-neariest neighbor and Linear classifier
 
-Перед выполнением задания:
-- Запустите файл `download_data.sh`, чтобы скачать данные, которые мы будем использовать для тренировки.
-- Установите все необходимые библиотеки, запустив `pip install -r requirements.txt` (если раньше не работали с pip, вам сюда - https://pip.pypa.io/en/stable/quickstart/).
+## Part 1
 
-## Часть 1
-Метод К-ближайших соседей (K-neariest neighbor classifier)
-
-`KNN.ipynb` - следуйте инструкциям в ноутбуке.
+Binary and multiclass implementation of KNN class and appropriate metrics
 
 ## Часть 2
-Линейный классификатор (Linear classifier)
 
-`Linear classifier.ipynb` - следуйте инструкциям в ноутбуке.
+Linear classifier
