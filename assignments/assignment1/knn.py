@@ -117,7 +117,8 @@ class KNN:
         pred = np.zeros(num_test, np.bool)
 
         for i in range(num_test):
-            nearest = np.argsort(dists[i])[:self.k]
+            # nearest = np.argsort(dists[i])[:self.k]
+            nearest = np.argpartition(dists[i], self.k)[:self.k]
             ones_count = np.sum(self.train_y[nearest])
             zeroes_count = self.k - ones_count
             pred[i] = zeroes_count < ones_count
@@ -137,12 +138,12 @@ class KNN:
            for every test sample
         '''
         num_test = dists.shape[0]
-        num_test = dists.shape[0]
         pred = np.zeros(num_test, np.int)
         for i in range(num_test):
-            nearest = np.argsort(dists[i])[:self.k]
+            nearest = np.argpartition(dists[i], self.k)[:self.k]
             counters = np.zeros(10)
             for j in self.train_y[nearest]:
                 counters[j] += 1
-            pred[i] = np.argsort(counters)[9]  
+            # pred[i] = np.argsort(counters)[9]          
+            pred[i] = np.argpartition(counters, -1)[-1:]
         return pred

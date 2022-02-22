@@ -25,7 +25,6 @@ def binary_classification_metrics(prediction, ground_truth):
     for i in range(len(prediction)):
         #         positive                       true
         tp += (1 if prediction[i] and prediction[i] == ground_truth[i] else 0)
-        #   equivalent to
         #tp += prediction[i] and prediction[i] == ground_truth[i]
 
         #          positive                       false
