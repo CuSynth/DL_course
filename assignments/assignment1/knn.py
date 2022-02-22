@@ -120,9 +120,10 @@ class KNN:
             # nearest = np.argsort(dists[i])[:self.k]
             nearest = np.argpartition(dists[i], self.k)[:self.k]
             ones_count = np.sum(self.train_y[nearest])
-            zeroes_count = self.k - ones_count
-            pred[i] = zeroes_count < ones_count
-
+            # zeroes_count = self.k - ones_count
+            # pred[i] = zeroes_count < ones_count
+            pred[i] = self.k  < 2 * ones_count
+            
         return pred
 
     def predict_labels_multiclass(self, dists):
