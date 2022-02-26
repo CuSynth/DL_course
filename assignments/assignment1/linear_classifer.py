@@ -17,6 +17,7 @@ def softmax(predictions):
     if(predictions.ndim == 1):
       exponents = np.exp(predictions - np.max(predictions))
       return exponents / np.sum(exponents)
+
     exponents = np.exp(predictions - np.amax(predictions, axis=1).reshape(-1, 1))
     devs = np.sum(exponents, axis = 1).reshape(-1, 1)
     return exponents / devs
@@ -69,6 +70,7 @@ def softmax_with_cross_entropy(predictions, target_index):
         idxs = np.arange(batch_size)
         dprediction[idxs, target_index] -= 1
         dprediction /= batch_size
+
     return loss, dprediction
 
 
@@ -142,8 +144,20 @@ class LinearSoftmaxClassifier():
             sections = np.arange(batch_size, num_train, batch_size)
             batches_indices = np.array_split(shuffled_indices, sections)
 
+            loss = 0
+            batch_count = len(batches_indices)
+            
+            for i in range(batch_count):
+                s_loss, grad = linear_softmax(X[batches_indices[i]], self.W, y[batches_indices[i]])
+                r_loss, r_grad = l2_regularization(self.W, reg)
+                s_loss += r_loss
+                grad += r_grad
+                self.W -= learning_rate * grad
+                loss += s_loss
+                loss_history.append(s_loss)
 
-            print("Epoch %i, loss: %f" % (epoch, loss))
+            loss = loss / batch_count
+            # print("Epoch %i, loss: %f" % (epoch, loss))
 
         return loss_history
 
@@ -157,19 +171,9 @@ class LinearSoftmaxClassifier():
         Returns:
           y_pred, np.array of int (test_samples)
         '''
-        y_pred = np.zeros(X.shape[0], dtype=np.int)
 
-        # TODO Implement class prediction
-        # Your final implementation shouldn't have any loops
-        raise Exception("Not implemented!")
+        y_pred = np.zeros(X.shape[0], dtype=np.int)
+        pred = np.dot(X, self.W)
+        _, y_pred = np.where(pred == np.amax(pred, axis = 1).reshape(-1, 1))
 
         return y_pred
-
-
-
-                
-                                                          
-
-            
-
-                
