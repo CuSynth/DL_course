@@ -8,4 +8,5 @@ Binary and multi-class implementation of KNN class and appropriate metrics
 
 ## Часть 2
 
-Linear classifier
+Linear classifier class and gradient check implementation
+
