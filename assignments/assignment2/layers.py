@@ -16,9 +16,54 @@ def l2_regularization(W, reg_strength):
       gradient, np.array same shape as W - gradient of weight by l2 loss
     """
     # TODO: Copy from the previous assignment
-    raise Exception("Not implemented!")
+    
+    loss = reg_strength * np.sum(np.square(W))
+    grad = reg_strength * 2 * W
+
     return loss, grad
 
+
+def softmax(predictions):
+    '''
+    Computes probabilities from scores
+
+    Arguments:
+      predictions, np array, shape is either (N) or (batch_size, N) -
+        classifier output
+
+    Returns:
+      probs, np array of the same shape as predictions - 
+        probability for every class, 0..1
+    '''
+
+    if(predictions.ndim == 1):
+      exponents = np.exp(predictions - np.max(predictions))
+      return exponents / np.sum(exponents)
+
+    exponents = np.exp(predictions - np.amax(predictions, axis=1).reshape(-1, 1))
+    devs = np.sum(exponents, axis = 1).reshape(-1, 1)
+    return exponents / devs
+
+def cross_entropy_loss(probs, target_index):
+    '''
+    Computes cross-entropy loss
+
+    Arguments:
+      probs, np array, shape is either (N) or (batch_size, N) -
+        probabilities for every class
+      target_index: np array of int, shape is (1) or (batch_size) -
+        index of the true class for given sample(s)
+
+    Returns:
+      loss: single value
+    '''
+
+    if(probs.ndim == 1):
+      return (-np.log(probs[target_index]))
+
+    batch_size = target_index.size
+    idxs = np.arange(target_index.size)
+    return -np.sum(np.log(probs[idxs, target_index])) / batch_size
 
 def softmax_with_cross_entropy(preds, target_index):
     """
@@ -36,9 +81,20 @@ def softmax_with_cross_entropy(preds, target_index):
       dprediction, np array same shape as predictions - gradient of predictions by loss value
     """
     # TODO: Copy from the previous assignment
-    raise Exception("Not implemented!")
+    
+    probs = softmax(preds)
+    loss = cross_entropy_loss(probs, target_index)
+    dprediction = probs
+    if (probs.ndim == 1):
+        dprediction[target_index] -= 1
+    else:
+        batch_size = target_index.size
+        idxs = np.arange(batch_size)
+        dprediction[idxs, target_index] -= 1
+        dprediction /= batch_size
 
-    return loss, d_preds
+    return loss, dprediction
+
 
 
 class Param:

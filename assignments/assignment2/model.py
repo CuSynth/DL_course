@@ -18,7 +18,11 @@ class TwoLayerNet:
         """
         self.reg = reg
         # TODO Create necessary layers
-        raise Exception("Not implemented!")
+        
+        self.struct = [FullyConnectedLayer(n_input, hidden_layer_size),
+                        ReLULayer(),
+                        FullyConnectedLayer(hidden_layer_size, n_output)]
+
 
     def compute_loss_and_gradients(self, X, y):
         """
@@ -33,14 +37,30 @@ class TwoLayerNet:
         # clear parameter gradients aggregated from the previous pass
         # TODO Set parameter gradient to zeros
         # Hint: using self.params() might be useful!
-        raise Exception("Not implemented!")
+
+        for _, elem in self.params().items():
+          elem.grad = 0
+
         
         # TODO Compute loss and fill param gradients
         # by running forward and backward passes through the model
         
         # After that, implement l2 regularization on all params
         # Hint: self.params() is useful again!
-        raise Exception("Not implemented!")
+
+        dat = X.copy()
+        for elem in self.struct:
+          dat = elem.forward(dat)
+
+        loss, grad = softmax_with_cross_entropy(dat, y)
+
+        for elem in reversed(self.struct):
+          grad = elem.backward(grad)
+
+        for _, elem in self.params().items():
+          l2_loss, l2_grad = l2_regularization(elem.value, self.reg)
+          elem.grad += l2_grad
+          loss += l2_loss
 
         return loss
 
@@ -59,14 +79,21 @@ class TwoLayerNet:
         # can be reused
         pred = np.zeros(X.shape[0], np.int)
 
-        raise Exception("Not implemented!")
+        for _, elem in self.params().items():
+          elem.grad = 0
+
+        dat = X.copy()
+        for elem in self.struct:
+          dat = elem.forward(dat)
+
+        pred = dat.argmax(axis=1)
         return pred
 
     def params(self):
-        result = {}
-
         # TODO Implement aggregating all of the params
 
-        raise Exception("Not implemented!")
-
-        return result
+      return { 'W_1' : self.struct[0].params()['W'],
+                   'B_1' : self.struct[0].params()['B'],
+                   'W_2' : self.struct[2].params()['W'],
+                   'B_2' : self.struct[2].params()['B'],
+        }
