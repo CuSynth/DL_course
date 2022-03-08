@@ -1,3 +1,5 @@
+from curses import delay_output
+from pyexpat.errors import XML_ERROR_DUPLICATE_ATTRIBUTE
 import numpy as np
 
 
@@ -51,6 +53,8 @@ class Param:
 
 
 class ReLULayer:
+    fwd_data = np.zeros(1)
+
     def __init__(self):
         pass
 
@@ -58,24 +62,30 @@ class ReLULayer:
         # TODO: Implement forward pass
         # Hint: you'll need to save some information about X
         # to use it later in the backward pass
-        raise Exception("Not implemented!")
+
+      self.fwd_data = X
+      # X[X < 0] = 0
+      # return X
+      return np.where(X < 0, 0, X)
+
 
     def backward(self, d_out):
-        """
-        Backward pass
+      """
+      Backward pass
 
-        Arguments:
-        d_out, np array (batch_size, num_features) - gradient
-           of loss function with respect to output
+      Arguments:
+      d_out, np array (batch_size, num_features) - gradient
+          of loss function with respect to output
 
-        Returns:
-        d_result: np array (batch_size, num_features) - gradient
-          with respect to input
-        """
-        # TODO: Implement backward pass
-        # Your final implementation shouldn't have any loops
-        raise Exception("Not implemented!")
-        return d_result
+      Returns:
+      d_result: np array (batch_size, num_features) - gradient
+        with respect to input
+      """
+      # TODO: Implement backward pass
+      # Your final implementation shouldn't have any loops
+      
+      return np.where(self.fwd_data < 0, 0, 1) * d_out
+
 
     def params(self):
         # ReLU Doesn't have any parameters
@@ -91,33 +101,37 @@ class FullyConnectedLayer:
     def forward(self, X):
         # TODO: Implement forward pass
         # Your final implementation shouldn't have any loops
-        raise Exception("Not implemented!")
+      
+      self.X = X
+      return X.dot(self.W.value) + self.B.value
 
     def backward(self, d_out):
-        """
-        Backward pass
-        Computes gradient with respect to input and
-        accumulates gradients within self.W and self.B
+      """
+      Backward pass
+      Computes gradient with respect to input and
+      accumulates gradients within self.W and self.B
 
-        Arguments:
-        d_out, np array (batch_size, n_output) - gradient
-           of loss function with respect to output
+      Arguments:
+      d_out, np array (batch_size, n_output) - gradient
+          of loss function with respect to output
 
-        Returns:
-        d_result: np array (batch_size, n_input) - gradient
-          with respect to input
-        """
-        # TODO: Implement backward pass
-        # Compute both gradient with respect to input
-        # and gradients with respect to W and B
-        # Add gradients of W and B to their `grad` attribute
+      Returns:
+      d_result: np array (batch_size, n_input) - gradient
+        with respect to input
+      """
+      # TODO: Implement backward pass
+      # Compute both gradient with respect to input
+      # and gradients with respect to W and B
+      # Add gradients of W and B to their `grad` attribute
 
-        # It should be pretty similar to linear classifier from
-        # the previous assignment
+      # It should be pretty similar to linear classifier from
+      # the previous assignment
 
-        raise Exception("Not implemented!")
-
-        return d_input
+      d_input = d_out.dot(self.W.value.T)
+      self.W.grad += self.X.T.dot(d_out)
+      self.B.grad += np.ones((1, d_out.shape[0])).dot(d_out)
+      
+      return d_input
 
     def params(self):
         return {'W': self.W, 'B': self.B}
