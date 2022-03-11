@@ -109,8 +109,6 @@ class Param:
 
 
 class ReLULayer:
-    fwd_data = np.zeros(1)
-
     def __init__(self):
         pass
 
