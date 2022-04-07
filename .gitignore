@@ -1,5 +1,7 @@
 *.mat
+*.jpg
 **/data
 **/.vscode
 **/.ipynb_checkpoints
 **/__pycache__
+**/.idea
