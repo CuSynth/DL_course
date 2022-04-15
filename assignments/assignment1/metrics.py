@@ -39,10 +39,13 @@ def binary_classification_metrics(prediction, ground_truth):
         fn += (1 if not prediction[i] and prediction[i] != ground_truth[i] else 0)
         # fn += not prediction[i] and prediction[i] != ground_truth[i]
 
-    tp = tp / len(prediction)
-    fp = fp / len(prediction)
-    tn = tn / len(prediction)
-    fn = fn / len(prediction)
+    # Strange. We don't need this there.
+    # Can't remember why I did it..
+
+    # tp = tp / len(prediction)
+    # fp = fp / len(prediction)
+    # tn = tn / len(prediction)
+    # fn = fn / len(prediction)
 
     precision = tp / (tp + fp)
     recall = tp / (tp + fn)
