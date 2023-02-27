@@ -19,3 +19,5 @@
 /assignments/assignment5/stanfordSentimentTreebank/sentiment_labels.txt
 /assignments/assignment5/stanfordSentimentTreebank/SOStr.txt
 /assignments/assignment5/stanfordSentimentTreebank/STree.txt
+*.json
+*.rtf
